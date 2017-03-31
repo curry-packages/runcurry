@@ -1,0 +1,16 @@
+{
+    "name": "runcurry",
+    "version": "0.0.1",
+    "author": "Michael Hanus <mh@informatik.uni-kiel.de>",
+    "synopsis": "Implementation of a command to run Curry programs directly",
+    "category": [ "Programming" ],
+    "dependencies": {  },
+    "executable": {
+        "name": "curry-run",
+        "main": "RunCurry"
+    },
+     "source": {
+        "git": "https://git.ps.informatik.uni-kiel.de/curry-packages/runcurry.git",
+        "tag": "$version"
+    }
+}
