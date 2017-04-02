@@ -6,7 +6,7 @@
     "category": [ "Programming" ],
     "dependencies": {  },
     "executable": {
-        "name": "curry-run",
+        "name": "runcurry",
         "main": "RunCurry"
     },
      "source": {
