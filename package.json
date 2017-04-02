@@ -9,6 +9,11 @@
         "name": "runcurry",
         "main": "RunCurry"
     },
+    "testsuite": {
+        "src-dir": "examples",
+        "options": "-v",
+        "script":  "test.sh"
+    },
      "source": {
         "git": "https://git.ps.informatik.uni-kiel.de/curry-packages/runcurry.git",
         "tag": "$version"
