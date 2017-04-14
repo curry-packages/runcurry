@@ -1,14 +1,13 @@
 #!/bin/sh
-# Shell script to test the current set of examples
+# Shell script to test the current set of 'runcurry' examples
 
 # Root location of the Curry System specified by variable CURRYROOT
-CURRYROOT=`curry :set v0 :set -time :add Distribution :eval "putStrLn installDir" :quit`
+CURRYROOT=`$CURRYBIN :set v0 :set -time :add Distribution :eval "putStrLn installDir" :quit`
+CURRYBINDIR=$CURRYROOT/bin
 
-CURRYBIN=$CURRYROOT/bin
-
-if [ -x "$CURRYBIN/pakcs" ] ; then
+if [ -x "$CURRYBINDIR/pakcs" ] ; then
     CURRYEXEC=pakcs
-elif [ -x "$CURRYBIN/kics2" ] ; then
+elif [ -x "$CURRYBINDIR/kics2" ] ; then
     CURRYEXEC=kics2
 else
     echo "ERROR: Unknown Curry system!"
@@ -21,9 +20,9 @@ if [ "$1" = "-v" ] ; then
 fi
 
 LOGFILE=xxx$$
-PATH=$CURRYBIN:$PATH
+PATH=$CURRYBINDIR:$PATH
 export PATH
-$CURRYBIN/cleancurry
+$CURRYBINDIR/cleancurry
 rm -f $LOGFILE
 
 cat << EOM | /bin/sh > $LOGFILE
@@ -49,13 +48,13 @@ diff TESTRESULT.$CURRYEXEC $LOGFILE > $DIFF
 if [ "`cat $DIFF`" = "" ] ; then
   echo "Regression test successfully executed!"
   /bin/rm -f $LOGFILE $DIFF
-  $CURRYBIN/cleancurry
+  $CURRYBINDIR/cleancurry
 else
   echo "DIFFERENCES IN REGRESSION TEST OCCURRED:"
   cat $DIFF
   /bin/rm -f $DIFF
   /bin/mv -f $LOGFILE LOGFILE
   echo "Test output saved in file 'LOGFILE'."
-  $CURRYBIN/cleancurry
+  $CURRYBINDIR/cleancurry
   exit 1
 fi
