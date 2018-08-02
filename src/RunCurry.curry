@@ -17,14 +17,15 @@
 --- @version November 2015
 ---------------------------------------------------------------------------
 
-import Char(isSpace)
-import Directory
+import Data.Char(isSpace)
+import System.Directory
+import System.FilePath (takeExtension)
 import Distribution(installDir,stripCurrySuffix)
-import FileGoodies(fileSuffix)
-import FilePath((<.>),(</>),isRelative)
-import IO (getContents,hFlush,stdout)
-import List(partition)
-import System(exitWith,getArgs,getPID,system)
+import System.FilePath((<.>),(</>),isRelative)
+import System.IO (getContents,hFlush,stdout)
+import Data.List(partition)
+import System.Process(exitWith,getPID,system)
+import System.Environment(getArgs)
 
 main :: IO ()
 main = do
@@ -64,7 +65,7 @@ checkFirstArg curryargs [] = do
   getContents >>= writeFile progname
   execAndDeleteCurryProgram progname curryargs [] >>= exitWith
 checkFirstArg curryargs (arg1:args) =
-  if fileSuffix arg1 `elem` ["curry","lcurry"]
+  if takeExtension arg1 `elem` ["curry","lcurry"]
   then execCurryProgram arg1 curryargs args >>= exitWith
   else do
     isexec <- isExecutable arg1
@@ -85,7 +86,7 @@ checkFirstArg curryargs (arg1:args) =
 
 -- Execute an already compiled binary (if it is newer than the first file arg)
 -- or compile the program and execute the binary:
-execOrJIT :: String -> String -> String -> [String] -> [String] -> IO Int  
+execOrJIT :: String -> String -> String -> [String] -> [String] -> IO Int
 execOrJIT scriptfile progname progtext curryargs rtargs = do
   let binname = if isRelative scriptfile
                 then "." </> scriptfile <.> "bin"
@@ -155,7 +156,7 @@ saveCurryProgram progname curryargs binname = do
 
 -- Executes a Curry program with given Curry system arguments and
 -- run-time arguments:
-execCurryProgram :: String -> [String] -> [String] -> IO Int  
+execCurryProgram :: String -> [String] -> [String] -> IO Int
 execCurryProgram progname curryargs rtargs = system $
   installDir ++ "/bin/curry " ++ replOpts ++ " " ++
   unwords curryargs ++ " :load " ++ progname ++
