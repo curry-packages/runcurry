@@ -14,18 +14,18 @@
 ---   when called the next time.
 ---
 --- @author Michael Hanus
---- @version November 2015
+--- @version September 2018
 ---------------------------------------------------------------------------
 
-import Data.Char(isSpace)
+import Distribution       (installDir,stripCurrySuffix)
+import Data.Char          (isSpace)
+import Data.List          (partition)
 import System.Directory
-import System.FilePath (takeExtension)
-import Distribution(installDir,stripCurrySuffix)
-import System.FilePath((<.>),(</>),isRelative)
-import System.IO (getContents,hFlush,stdout)
-import Data.List(partition)
-import System.Process(exitWith,getPID,system)
-import System.Environment(getArgs)
+import System.FilePath    (takeExtension)
+import System.FilePath    ((<.>),(</>),isRelative)
+import System.IO          (getContents,hFlush,stdout)
+import System.Process     (exitWith,getPID,system)
+import System.Environment (getArgs)
 
 main :: IO ()
 main = do
@@ -135,8 +135,11 @@ getNewProgramName = do
 -- Is the argument the name of an executable file?
 isExecutable :: String -> IO Bool
 isExecutable fname = do
-  ec <- system $ "test -x " ++ fname
-  return (ec==0)
+  fexists <- doesFileExist fname
+  if fexists
+    then do ec <- system $ "test -x " ++ fname
+            return (ec==0)
+    else return False            
 
 -- Our default options for the REPL:
 replOpts :: String
@@ -167,7 +170,7 @@ execCurryProgram progname curryargs rtargs = system $
 execAndDeleteCurryProgram :: String -> [String] -> [String] -> IO Int
 execAndDeleteCurryProgram progname curryargs rtargs = do
   ec <- execCurryProgram progname curryargs rtargs
-  system (installDir++"/bin/cleancurry "++progname)
+  system (installDir ++ "/bin/cleancurry " ++ progname)
   removeFile progname
   return ec
 
