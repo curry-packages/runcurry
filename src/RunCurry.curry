@@ -14,17 +14,19 @@
 ---   when called the next time.
 ---
 --- @author Michael Hanus
---- @version September 2018
+--- @version December 2018
 ---------------------------------------------------------------------------
 
 import Char         ( isSpace )
 import Directory
-import Distribution ( installDir, stripCurrySuffix )
+import Distribution ( installDir )
 import FileGoodies  ( fileSuffix )
 import FilePath     ( (<.>), (</>), isRelative )
 import IO           ( getContents, hFlush, stdout )
 import List         ( partition )
 import System       ( exitWith, getArgs, getPID, system )
+
+import System.CurryPath ( stripCurrySuffix )
 
 main :: IO ()
 main = do
