@@ -1,7 +1,7 @@
 #!/usr/bin/env runcurry
 #jit
 
-import System(getArgs)
+import System.Environment ( getArgs )
 
 main = do
   putStr "Run-time arguments: "

@@ -1,3 +1,3 @@
-import System(getArgs)
+import System.Environment ( getArgs )
 
 main = getArgs >>= print

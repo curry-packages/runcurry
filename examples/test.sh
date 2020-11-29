@@ -2,7 +2,7 @@
 # Shell script to test the current set of 'runcurry' examples
 
 # Root location of the Curry System specified by variable CURRYROOT
-CURRYROOT=`$CURRYBIN :set v0 :set -time :add Distribution :eval "putStrLn installDir" :quit`
+CURRYROOT=`$CURRYBIN :set v0 :set -time :add Curry.Compiler.Distribution :eval "putStrLn installDir" :quit`
 CURRYBINDIR=$CURRYROOT/bin
 
 if [ -x "$CURRYBINDIR/pakcs" ] ; then

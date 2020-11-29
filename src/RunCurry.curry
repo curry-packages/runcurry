@@ -14,19 +14,20 @@
 ---   when called the next time.
 ---
 --- @author Michael Hanus
---- @version December 2018
+--- @version November 2020
 ---------------------------------------------------------------------------
 
-import Char         ( isSpace )
-import Directory
-import Distribution ( installDir )
-import FileGoodies  ( fileSuffix )
-import FilePath     ( (<.>), (</>), isRelative )
-import IO           ( getContents, hFlush, stdout )
-import List         ( partition )
-import System       ( exitWith, getArgs, getPID, system )
+import Control.Monad               ( unless )
+import Curry.Compiler.Distribution ( installDir )
+import Data.Char                   ( isSpace )
+import Data.List                   ( partition )
+import System.Environment          ( getArgs )
 
-import System.CurryPath ( stripCurrySuffix )
+import System.CurryPath    ( stripCurrySuffix )
+import System.Directory
+import System.FilePath     ( (<.>), (</>), isRelative, takeExtension )
+import System.IO           ( getContents, hFlush, stdout )
+import System.Process      ( exitWith, getPID, system )
 
 main :: IO ()
 main = do
@@ -66,7 +67,7 @@ checkFirstArg curryargs [] = do
   getContents >>= writeFile progname
   execAndDeleteCurryProgram progname curryargs [] >>= exitWith
 checkFirstArg curryargs (arg1:args) =
-  if fileSuffix arg1 `elem` ["curry","lcurry"]
+  if takeExtension arg1 `elem` [".curry",".lcurry"]
   then execCurryProgram arg1 curryargs args >>= exitWith
   else do
     isexec <- isExecutable arg1
