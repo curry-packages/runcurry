@@ -14,7 +14,7 @@
 ---   when called the next time.
 ---
 --- @author Michael Hanus
---- @version November 2020
+--- @version June 2021
 ---------------------------------------------------------------------------
 
 import Control.Monad               ( unless )
@@ -22,11 +22,11 @@ import Curry.Compiler.Distribution ( installDir )
 import Data.Char                   ( isSpace )
 import Data.List                   ( partition )
 import System.Environment          ( getArgs )
+import System.IO                   ( getContents, hFlush, stdout )
 
 import System.CurryPath    ( stripCurrySuffix )
 import System.Directory
 import System.FilePath     ( (<.>), (</>), isRelative, takeExtension )
-import System.IO           ( getContents, hFlush, stdout )
 import System.Process      ( exitWith, getPID, system )
 
 main :: IO ()
@@ -155,7 +155,7 @@ saveCurryProgram progname curryargs binname = do
                  unwords curryargs ++ " :load " ++ progname ++
                  " :save :quit"
   unless (ec/=0) $ renameFile (stripCurrySuffix progname) binname
-  system (installDir++"/bin/cleancurry "++progname)
+  system $ installDir </> "bin" </> "cleancurry" ++ " " ++ progname
   removeFile progname
   return ec
 
