@@ -1,16 +1,15 @@
 #!/bin/sh
 # Shell script to test the current set of 'runcurry' examples
 
-# Root location of the Curry System specified by variable CURRYROOT
-CURRYROOT=`$CURRYBIN :set v0 :set -time :add Curry.Compiler.Distribution :eval "putStrLn installDir" :quit`
-CURRYBINDIR=$CURRYROOT/bin
+# Compute bin directory of the Curry System:
+CURRYBINDIR=$(dirname $(realpath $CURRYBIN))
 
 if [ -x "$CURRYBINDIR/pakcs" ] ; then
     CURRYEXEC=pakcs
 elif [ -x "$CURRYBINDIR/kics2" ] ; then
     CURRYEXEC=kics2
 else
-    echo "ERROR: Unknown Curry system!"
+    echo "ERROR: Unknown Curry system in bin directory '$CURRYBINDIR'!"
     exit 1
 fi
 
