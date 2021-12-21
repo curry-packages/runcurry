@@ -4,15 +4,6 @@
 # Compute bin directory of the Curry System:
 CURRYBINDIR=$(dirname $(realpath $CURRYBIN))
 
-if [ -x "$CURRYBINDIR/pakcs" ] ; then
-    CURRYEXEC=pakcs
-elif [ -x "$CURRYBINDIR/kics2" ] ; then
-    CURRYEXEC=kics2
-else
-    echo "ERROR: Unknown Curry system in bin directory '$CURRYBINDIR'!"
-    exit 1
-fi
-
 VERBOSE=no
 if [ "$1" = "-v" ] ; then
   VERBOSE=yes
@@ -43,7 +34,7 @@ fi
 
 # Check differences:
 DIFF=diff$$
-diff TESTRESULT.$CURRYEXEC $LOGFILE > $DIFF
+diff TESTRESULT.txt $LOGFILE > $DIFF
 if [ "`cat $DIFF`" = "" ] ; then
   echo "Regression test successfully executed!"
   /bin/rm -f $LOGFILE $DIFF
