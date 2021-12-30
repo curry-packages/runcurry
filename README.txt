@@ -11,7 +11,7 @@ The `runcurry` command has three modes of operation:
 * Interactive mode: execute the `main` operation of a Curry program
   whose program text comes from the standard input, e.g.,
 
-    > runcurry"
+    > runcurry
     ...type your Curry program until end-of-file...
 
 * Shell script: execute the `main` operation of a Curry program
@@ -26,6 +26,11 @@ The `runcurry` command has three modes of operation:
   and saved as an executable so that it is faster executed
   when called the next time.
 
+Note that the `runcurry` command is intended to compile simple
+Curry programs which use only base libraries but no libraries
+defined in other Curry packages.
+If this behavior should be changed, one has to adapt
+the constant `RunCurry.replOpts` in this package.
 
 The directory `examples` contains various examples of using `runcurry`.
 
