@@ -23,7 +23,7 @@
         "script":  "test.sh"
     },
      "source": {
-        "git": "https://git.ps.informatik.uni-kiel.de/curry-packages/runcurry.git",
+        "git": "https://github.com/curry-packages/runcurry.git",
         "tag": "$version"
     }
 }
