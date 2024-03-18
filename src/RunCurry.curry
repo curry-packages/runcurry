@@ -19,7 +19,7 @@
 --- Otherwise, one has to adapt the constant `replOpts` below.
 ---
 --- @author Michael Hanus
---- @version December 2021
+--- @version March 2024
 ---------------------------------------------------------------------------
 
 import Control.Monad               ( unless )
@@ -29,7 +29,7 @@ import Data.List                   ( partition )
 import System.Environment          ( getArgs )
 import System.IO                   ( getContents, hFlush, stdout )
 
-import System.CurryPath    ( stripCurrySuffix )
+import System.CurryPath    ( setCurryPath, stripCurrySuffix )
 import System.Directory
 import System.FilePath     ( (<.>), (</>), isRelative, takeExtension )
 import System.Process      ( exitWith, getPID, system )
@@ -39,6 +39,8 @@ import System.Process      ( exitWith, getPID, system )
 -- and no use of the Curry package manager.
 -- If the actual Curry system has different options, this constant
 -- should be adapted.
+-- The option `--nocypm` is set since the CURRYPATH is explicitly set
+-- (by `setCurryPath`) before the runner starts.
 replOpts :: String
 replOpts = "--nocypm :set v0 :set parser -Wnone :set -time"
 
@@ -51,8 +53,8 @@ main = do
     ("-h":_)     -> putStrLn usageMsg
     ("--help":_) -> putStrLn usageMsg
     ("-?":_)     -> putStrLn usageMsg
-    _            -> checkFirstArg [] args
-
+    _            -> do setCurryPath True ""
+                       checkFirstArg [] args
 
 -- Usage message:
 usageMsg :: String
@@ -71,7 +73,7 @@ usageMsg = unlines $
   ,"...type your Curry program until end-of-file..."
   ]
 
--- check whether runcurry is called in script mode, i.e., the argument
+-- Check whether runcurry is called in script mode, i.e., the argument
 -- is not a Curry program but an existing file:
 checkFirstArg :: [String] -> [String] -> IO ()
 checkFirstArg curryargs [] = do
